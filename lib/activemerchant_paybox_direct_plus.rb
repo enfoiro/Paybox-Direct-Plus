@@ -82,6 +82,7 @@ module ActiveMerchant #:nodoc:
         add_user_reference(post, options)
         add_credit_card_type(post, options)
         add_error_code_test(post, options)
+        modify_request_timeout(options)
         commit('subscriber_authorization', money, post)
       end
 
@@ -93,6 +94,7 @@ module ActiveMerchant #:nodoc:
         add_user_reference(post, options)
         add_credit_card_type(post, options)
         add_error_code_test(post, options)
+        modify_request_timeout(options)
         commit('subscriber_purchase', money, post)
       end
 
@@ -104,6 +106,7 @@ module ActiveMerchant #:nodoc:
         add_user_reference(post, options)
         add_credit_card_type(post, options)
         add_error_code_test(post, options)
+        modify_request_timeout(options)
         commit('subscriber_capture', money, post)
       end
 
@@ -117,6 +120,7 @@ module ActiveMerchant #:nodoc:
         add_error_code_test(post, options)
         post[:porteur] = '000000000000000'
         post[:dateval] = '0000'
+        modify_request_timeout(options)
         commit('subscriber_void', money, post)
       end
 
@@ -127,6 +131,7 @@ module ActiveMerchant #:nodoc:
         add_user_reference(post, options)
         add_credit_card_type(post, options)
         add_error_code_test(post, options)
+        modify_request_timeout(options)
         commit('subscriber_credit', money, post)
       end
 
@@ -137,6 +142,7 @@ module ActiveMerchant #:nodoc:
         add_user_reference(post, options)
         add_credit_card_type(post, options)
         add_error_code_test(post, options)
+        modify_request_timeout(options)
         commit('subscriber_create', money, post)
       end
 
@@ -146,6 +152,7 @@ module ActiveMerchant #:nodoc:
         add_user_reference(post, options)
         add_credit_card_type(post, options)
         add_error_code_test(post, options)
+        modify_request_timeout(options)
         commit('subscriber_update', money, post)
       end
 
@@ -186,6 +193,10 @@ module ActiveMerchant #:nodoc:
 
       def add_error_code_test(post, options)
         post[:errorcodetest] = options[:errorcodetest] if options[:errorcodetest]
+      end
+
+      def modify_request_timeout(options)
+        Gateway.open_timeout = Gateway.read_timeout = options[:timeout].to_i if options[:timeout]
       end
 
       def parse(body)
